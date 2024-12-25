@@ -1,5 +1,5 @@
 # Linux-device-driver-
-A simple linux device driver that can be run on both x86 and edge device (specifically most compatible with Raspberry Pi)
+A simple linux device driver that can be run on both x86 and edge device (specifically most compatible with Raspberry Pi) as Rpi 's OS is easier to configure
 
 # Setup:
 1. sudo apt update
@@ -11,3 +11,5 @@ A simple linux device driver that can be run on both x86 and edge device (specif
 5. sudo reboot
    
    //for opening of a fresh kernal
+   
+// 4. is necessary as we are running c scripts therefore it requires gcc , make
