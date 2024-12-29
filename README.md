@@ -13,3 +13,7 @@ A simple linux device driver that can be run on both x86 and edge device (specif
    //for opening of a fresh kernel
    
 // 4. is necessary as we are running c scripts therefore it requires gcc , make
+
+Then check the conents of the build folder:
+![image](https://github.com/user-attachments/assets/a726110f-da0a-42f1-9d67-217bbc47ef80)
+
