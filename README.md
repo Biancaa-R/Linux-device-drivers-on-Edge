@@ -10,6 +10,6 @@ A simple linux device driver that can be run on both x86 and edge device (specif
 4. sudo apt install -y build-essential
 5. sudo reboot
    
-   //for opening of a fresh kernal
+   //for opening of a fresh kernel
    
 // 4. is necessary as we are running c scripts therefore it requires gcc , make
