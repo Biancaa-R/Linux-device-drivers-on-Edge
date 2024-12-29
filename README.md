@@ -43,3 +43,4 @@ $ ls /dev/ -al
 
 shows the device in the list after the creation of the node . cat /proc/devices doesnt confirm the device creation (node) only the number associted.
 
+Issues: https://www.notion.so/Issues-16b3175a5f4380b3bb9fc1a1f0b49a01
