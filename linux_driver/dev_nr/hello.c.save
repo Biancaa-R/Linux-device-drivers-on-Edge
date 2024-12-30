@@ -1,0 +1,47 @@
+#include <linux/module.h>
+#include <linux/init.h>
+#include <linux/fs.h>
+// for the handling of file systems
+
+//when device file is opened
+static int driver_open(struct inode *device_file,struct file *instance)
+{
+	printk("dev_nr -open was called");
+	return 0;
+}
+
+static int driver_close(struct inode *device_file,struct file *instance)
+{
+        printk("dev_nr -close was called");
+        return 0;
+}
+
+static struct file_operations fops= {
+	.owner=THIS_MODULE,
+	.open=driver_open,
+	.release =driver_close
+};
+
+int my_init(void)
+{	int retval;
+        printk("hello -hello kerell\n");
+	//registering of the device number
+0000000000	retval =register_chrdev(
+        return 0;
+}
+static void my_exit(void)
+{
+        printk("hello -good bye kernel\n");
+        // return 0;
+}
+
+
+module_init(my_init);
+module_exit(my_exit);
+
+/*meta info*/
+//specify the lIcense using macro lisense
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Biancaa");
+MODULE_DESCRIPTION("registers a device number");
+
