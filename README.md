@@ -43,4 +43,17 @@ $ ls /dev/ -al
 
 shows the device in the list after the creation of the node . cat /proc/devices doesnt confirm the device creation (node) only the number associted.
 
+# Reading after the creation of device:
+
+So the loading of the .ko file (lkm) of the corresponding device is necessary for the accessing of that device for either read/write
+
+* initially when the corresponding kernel module for major no. 90 was not loaded but for 104 , it is unable to access the file.
+
+![image](https://github.com/user-attachments/assets/8b4b521c-7002-46e0-a6b2-f4aa5445e05e)
+
+output messages:
+
+![image](https://github.com/user-attachments/assets/e6b2e871-3999-4004-9b82-a77ed37ec21a)
+
+
 Issues: https://www.notion.so/Issues-16b3175a5f4380b3bb9fc1a1f0b49a01
