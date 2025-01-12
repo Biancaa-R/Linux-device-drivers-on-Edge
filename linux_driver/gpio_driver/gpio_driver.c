@@ -3,10 +3,10 @@
 #include <linux/fs.h>
 #include <linux/cdev.h>
 #include <linux/uaccess.h>
-
+#include <linux/gpio.h>
 // for the handling of file systems
 #define MYMAJOR  90
-#define DRIVER_NAME "dummydriver"
+#define DRIVER_NAME "my_gpio_driver"
 #define DRIVER_CLASS "MyModuleClass"
 //when device file is opened
 
@@ -24,8 +24,12 @@ static struct cdev my_device;
 static ssize_t driver_read(struct file *File, char *user_buffer,size_t count,loff_t *offs)
 {
 	int to_copy,not_copied, delta;
-	to_copy = min(count, buffer_pointer);
-	not_copied =copy_to_user(user_buffer,buffer,to_copy);
+	char tmp[3] ="\n";
+	to_copy = min(count, sizeof(tmp));
+	printk("Value of button %d\n",gpio_get_value(17));
+	not_copied =copy_to_user(user_buffer,&tmp,to_copy);
+	tmp[0]= gpio_get_value(17)+'0';
+	not_copied =copy_to_user(user_buffer,&tmp,to_copy);
 	delta = to_copy-not_copied;
 	return delta;
 }
@@ -33,9 +37,21 @@ static ssize_t driver_read(struct file *File, char *user_buffer,size_t count,lof
 static ssize_t driver_write(struct file *File, const char *user_buffer,size_t count,loff_t *offs)
 {
         int to_copy,not_copied, delta;
-        to_copy = min(count, sizeof(buffer));
-        not_copied =copy_from_user(buffer,user_buffer,to_copy);
-	buffer_pointer=to_copy;
+	char value;
+        to_copy = min(count, sizeof(value));
+        not_copied =copy_from_user(&value,user_buffer,to_copy);
+	//buffer_pointer=to_copy;
+	switch (value)
+	{	case '0':
+			gpio_set_value(4,0);
+			break;
+		case '1':
+			gpio_set_value(4,1);
+			break;
+		default:
+			printk("Invalid Input");
+			break;
+	}
         delta = to_copy-not_copied;
         return delta;
 }
@@ -83,9 +99,36 @@ int __init ModuleInit(void)
 	//initialize the device file:
 	cdev_init(&my_device, &fops);
 	if (cdev_add(&my_device,my_device_nr,1) == -1){
-		printk("Registering of device to kernel failed");
+		printk("Registering of device to kernel failed\n");
 		goto AddError;
 	}
+	//GPIO 4 as op init
+	if (gpio_request(4, "rpi-gpio-4"))
+	{	printk("Cannot allocate GPIO 4 \n");
+		goto AddError;
+	}
+	//setting of GPIO direction
+	if (gpio_direction_output(4,0)){
+		printk("Cannot set GPIO 4 as output\n");
+		goto Gpio4Error;
+	}
+        //GPIO 17 as op init
+        if (gpio_request(17, "rpi-gpio-17"))
+        {       printk("Cannot allocate GPIO 17 \n");
+                goto AddError;
+        }
+        //setting of GPIO direction
+        if (gpio_direction_input(17)){
+                printk("Cannot set GPIO 17 as output\n");
+                goto Gpio17Error;
+        }
+
+	return 0;
+	
+	Gpio17Error:	
+		gpio_free(17);
+	Gpio4Error:
+		gpio_free(4);
 	AddError:
 		device_destroy(my_class,my_device_nr);
 
@@ -94,8 +137,6 @@ int __init ModuleInit(void)
 	ClassError:
 		unregister_chrdev(my_device_nr,DRIVER_NAME);
 		return -1;
-
-        return 0;
 }
 static void __exit ModuleExit(void)
 {
@@ -106,6 +147,11 @@ static void __exit ModuleExit(void)
 	//unregister_chrdev(my_device_nr,DRIVER_NAME);
 	////unregister_chrdev(MYMAJOR ,"my_dev_nr");// for the number
         //printk("dev_nr -good bye kernel\n");
+
+	//setting of the output port to 0
+	gpio_set_value(4,0);
+	gpio_free(17);
+	gpio_free(4);
 	cdev_del(&my_device);
 	device_destroy(my_class,my_device_nr);
 	class_destroy(my_class);
@@ -122,5 +168,5 @@ module_exit(ModuleExit);
 //specify the lIcense using macro lisense
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Biancaa");
-MODULE_DESCRIPTION("registers a device number");
+MODULE_DESCRIPTION("A basic GPIO device driver");
 

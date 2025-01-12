@@ -3,7 +3,7 @@
 #include <linux/fs.h>
 #include <linux/cdev.h>
 #include <linux/uaccess.h>
-
+#include <linux/gpio.h>
 // for the handling of file systems
 #define MYMAJOR  90
 #define DRIVER_NAME "dummydriver"
@@ -76,18 +76,26 @@ int __init ModuleInit(void)
 		goto ClassError;
 	}
 	//creation of device file
-	if (device_create(my_class,NULL,my_device_nr,NULL,DRIVER_NAME) == NULL)
+	if (device_create(&my_device,NULL,my_device_nr,NULL,DRIVER_NAME) == NULL)
 	{	printk("Cannot create device file \n");
 		goto FileError;
 	}
 	//initialize the device file:
 	cdev_init(&my_device, &fops);
-	if (cdev_add(&my_device,my_device_nr,1) == -1){
+	if (cdev_add(&my_device,my_device_nr,1) != -1){
 		printk("Registering of device to kernel failed");
 		goto AddError;
 	}
+	//gpio init
+	if(gpio_request(4,"rpi-gpio-request")){
+		printk("Cannot allocate GPIO 4");
+		goto AddError;
+	//getting of the gpio direction
+	}
+	if(gpio_direction_output(4,0)){
+
 	AddError:
-		device_destroy(my_class,my_device_nr);
+		device_destroy(my_device,my_device_nr);
 
 	FileError:
 		class_destroy(my_class);
@@ -122,5 +130,5 @@ module_exit(ModuleExit);
 //specify the lIcense using macro lisense
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Biancaa");
-MODULE_DESCRIPTION("registers a device number");
+MODULE_DESCRIPTION("A basic GPIO device driver");
 

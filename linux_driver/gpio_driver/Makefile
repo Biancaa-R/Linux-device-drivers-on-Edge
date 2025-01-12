@@ -1,4 +1,4 @@
-obj-m += read_write.o
+obj-m += gpio_driver.o
 
 all:
 	$(MAKE) -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
