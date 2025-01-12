@@ -59,3 +59,23 @@ output messages:
 
 
 Issues: https://www.notion.so/Issues-16b3175a5f4380b3bb9fc1a1f0b49a01
+
+# Read Write :
+![image](https://github.com/user-attachments/assets/38458fec-f2c0-4508-8a24-e528e40b5c1a)
+
+shows the output response when the read_write LKM is loaded into the kernel.
+
+So a dummy driver with a major number of 234, minor 0 is registered in the list of device drivers.
+![image](https://github.com/user-attachments/assets/89cf1d4c-e41e-4cad-871a-0687eb57f090)
+
+calling it by the node name given in the program (otherwise had to be made by the sudo mknod c/b <maj> <min>
+command.
+and changing permissions.
+![image](https://github.com/user-attachments/assets/4835d5bd-bb47-4f82-81f6-d1dddd1366bc)
+
+writing and reading the contents of the driver.
+
+output logs generated:
+![image](https://github.com/user-attachments/assets/b76fb41a-8e64-4172-9b65-c06359563fa1)
+
+
