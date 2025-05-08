@@ -3,6 +3,34 @@ A simple linux device driver that can be run on both x86 and edge device (specif
 
 note: GPIO drivers are specific to Rpi / Any other SBC with similar numbering
 
+## 🧩 Overview
+This project contains Linux kernel modules developed from scratch for the Raspberry Pi 4B. It includes:
+- A basic character device driver
+- A GPIO control module for toggling LEDs via sysfs
+
+Designed to demonstrate low-level interaction with Linux kernel space using `loadable kernel modules` (LKM), targeting embedded systems and hardware-near control.
+
+---
+
+## ⚙️ Technical Stack
+- Platform: Raspberry Pi 4B (64-bit Debian OS)
+- Language: C
+- Kernel Version: 5.x
+- Interfaces: `insmod`, `sysfs`, `udev`, `/dev/`
+- Tools: `make`, `modprobe`, `dmesg`, `cat`, `echo`
+
+---
+
+## 🛠️ Features
+- Registers a custom char device in `/dev/rpi_drv`
+- Supports basic `open`, `read`, `write`, `close` ops
+- Controls a user-defined GPIO pin via sysfs
+- Cleanly handles `module_init` and `module_exit`
+
+---
+
+
+
 # Setup:
 1. sudo apt update
 2. sudo apt upgrade -y
