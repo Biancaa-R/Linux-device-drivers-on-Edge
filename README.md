@@ -1,19 +1,21 @@
 # Linux-device-driver-
 A simple linux device driver that can be run on both x86 and edge device (specifically most compatible with Raspberry Pi) as Rpi 's OS is easier to configure
+Tested on a normal linux system as well.
 
 note: GPIO drivers are specific to Rpi / Any other SBC with similar numbering
 
-## 🧩 Overview
+##  Overview
 This project contains Linux kernel modules developed from scratch for the Raspberry Pi 4B. It includes:
 - A basic character device driver
 - A GPIO control module for toggling LEDs via sysfs
+- Drivers for usb
 
 Designed to demonstrate low-level interaction with Linux kernel space using `loadable kernel modules` (LKM), targeting embedded systems and hardware-near control.
 
 ---
 
 ## ⚙️ Technical Stack
-- Platform: Raspberry Pi 4B (64-bit Debian OS)
+- Platform: Raspberry Pi 4B (64-bit Debian OS), Ubuntu 24.04 LTS
 - Language: C
 - Kernel Version: 5.x
 - Interfaces: `insmod`, `sysfs`, `udev`, `/dev/`
@@ -105,5 +107,13 @@ writing and reading the contents of the driver.
 
 output logs generated:
 ![image](https://github.com/user-attachments/assets/b76fb41a-8e64-4172-9b65-c06359563fa1)
+
+USB Device drivers:
+
+1. For some reason the connection and the removal is detected only once -> directly from continuous dmesg ->matched on vendor id and product ID.
+<img width="1314" height="736" alt="image" src="https://github.com/user-attachments/assets/e32fd09b-ee8e-4d7c-b132-c4e940cc733a" />
+The collected message for registering the device -> During insertion of the kernel module.
+<img width="933" height="108" alt="image" src="https://github.com/user-attachments/assets/b760b79c-699d-4527-aac1-7a3dc381d80f" />
+
 
 
